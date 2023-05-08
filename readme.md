@@ -4,6 +4,12 @@
 
 Object oriented event emitter for PHP
 
+### Install
+
+```bash
+composer require exan/eventer
+```
+
 ### Example usage
 
 ```php
