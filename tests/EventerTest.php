@@ -81,6 +81,42 @@ class EventerTest extends TestCase
         $this->assertEquals([true], $state->runs);
     }
 
+    public function testItDoesNotClearFilteredEventsAfterNonMatchedFilters()
+    {
+        $eventer = new Eventer();
+
+        $state = (object) ['runs' => []];
+
+        $event = new class ($state, true) implements EventInterface {
+            public function __construct(private stdClass &$state, private bool $shouldRun)
+            {
+            }
+
+            public static function getEventName(): string
+            {
+                return '::event name::';
+            }
+
+            public function filter(): bool
+            {
+                return $this->shouldRun;
+            }
+
+            public function execute(): void
+            {
+                $this->state->runs[] = $this->shouldRun;
+            }
+        };
+
+        $eventer->registerOnce($event::class);
+
+        $eventer->emit('::event name::', [$state, false]);
+        $eventer->emit('::event name::', [$state, true]);
+        $eventer->emit('::event name::', [$state, true]);
+
+        $this->assertEquals([true], $state->runs);
+    }
+
     public function testItDoesNotEmitOnEventsWithADifferentName()
     {
         $eventer = new Eventer();

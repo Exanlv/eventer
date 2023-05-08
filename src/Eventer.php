@@ -65,10 +65,12 @@ class Eventer
 
     protected function handleOnce(string $type, string $eventName, array $args)
     {
-        foreach ($this->{$type}[$eventName] ?? [] as $event) {
-            $this->handleEvent($event, $args);
+        foreach ($this->{$type}[$eventName] ?? [] as $key => $event) {
+            $hasRun = $this->handleEvent($event, $args);
 
-            $this->{$type}[$eventName] = [];
+            if ($hasRun) {
+                unset($this->{$type}[$eventName][$key]);
+            }
         }
     }
 
@@ -82,14 +84,17 @@ class Eventer
     /**
      * @var class-string $event
      */
-    protected function handleEvent(string $event, array $args)
+    protected function handleEvent(string $event, array $args): bool
     {
         /** @var EventInterface */
         $eventInstance = new $event(...$args);
 
         if ($eventInstance->filter()) {
             $eventInstance->execute();
+            return true;
         }
+
+        return false;
     }
 
     /**
