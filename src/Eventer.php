@@ -22,36 +22,36 @@ class Eventer
      * @var class-string $event
      * @throws InvalidEventException
      */
-    public function register(string $event)
+    public function register(string ...$events)
     {
-        $this->registerFor('listeners', $event);
+        $this->registerFor('listeners', $events);
     }
 
     /**
      * @var class-string $event
      * @throws InvalidEventException
      */
-    public function registerOnce(string $event)
+    public function registerOnce(string ...$events)
     {
-        $this->registerFor('listenersOnce', $event);
+        $this->registerFor('listenersOnce', $events);
     }
 
     /**
      * @var class-string $event
      * @throws InvalidEventException
      */
-    public function before(string $event)
+    public function before(string ...$events)
     {
-        $this->registerFor('before', $event);
+        $this->registerFor('before', $events);
     }
 
     /**
      * @var class-string $event
      * @throws InvalidEventException
      */
-    public function beforeOnce(string $event)
+    public function beforeOnce(string ...$events)
     {
-        $this->registerFor('beforeOnce', $event);
+        $this->registerFor('beforeOnce', $events);
     }
 
     public function emit(string $eventName, array $args)
@@ -122,16 +122,18 @@ class Eventer
      * @var class-string $event
      * @throws InvalidEventException
      */
-    protected function registerFor(string $type, string $event): void
+    protected function registerFor(string $type, array $events): void
     {
-        $this->validateEvent($event);
+        foreach ($events as $event) {
+            $this->validateEvent($event);
 
-        $eventName = self::getEventName($event);
+            $eventName = self::getEventName($event);
 
-        if (!isset($this->{$type}[$eventName])) {
-            $this->{$type}[$eventName] = [];
+            if (!isset($this->{$type}[$eventName])) {
+                $this->{$type}[$eventName] = [];
+            }
+
+            $this->{$type}[$eventName][] = $event;
         }
-
-        $this->{$type}[$eventName][] = $event;
     }
 }
