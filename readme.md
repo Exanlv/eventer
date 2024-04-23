@@ -2,7 +2,7 @@
 
 [![Eventer Code Quality Assurance](https://github.com/Exanlv/eventer/actions/workflows/code-quality.yml/badge.svg)](https://github.com/Exanlv/eventer/actions/workflows/code-quality.yml) [![Eventer Unit Tests](https://github.com/Exanlv/eventer/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/Exanlv/eventer/actions/workflows/unit-tests.yml)
 
-Object oriented event emitter for PHP
+Object oriented event emitter for PHP test
 
 ### Install
 
