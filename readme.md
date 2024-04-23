@@ -4,6 +4,8 @@
 
 Object oriented event emitter for PHP
 
+For the majority of projects, you should probably use `evenement/evenement`. This may in some instances produce hard to follow code, in which case this approach may be more desirable.
+
 ### Install
 
 ```bash
